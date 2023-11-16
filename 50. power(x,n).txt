@@ -15,26 +15,24 @@ Explanation: 2-2 = 1/22 = 1/4 = 0.25
 ;;;;
 JAVA
 ;;;
-
 class Solution {
     public double myPow(double x, int n) {
-
-        if(n==0)
-        {
-            return 1;
-
-        }
-        if(n<0){
-            x=1/x;
-
-            if(n == Integer.MIN_VALUE)
-            { // if n=-1024, we multiply x by x and incremnet n value by 1 to bring n close to 0.
-                x*=x;
-                n++;
-            }
-            n=-n;
-        }
-        return (n%2 ==0)? myPow(x*x, n/2): x * myPow(x*x, n/2);
-        
+        return util1(x,n);
     }
-}
+    public double util1(double x, int n) {
+		long N = (long) n;
+		if (n < 0) {
+			return 1.0 / helper2(x, N * -1);
+		} else {
+			return helper2(x, N);
+		}
+       }
+
+	// will use binary exponention
+	public double helper2(double x, long n) {
+		if (n == 0) {
+			return 1.0;
+		}
+		return (n % 2 == 0)? helper2(x * x, n / 2) : x * helper2(x * x, (n - 1) / 2);
+		}
+	}
