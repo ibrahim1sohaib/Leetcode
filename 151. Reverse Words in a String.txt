@@ -1,0 +1,41 @@
+151. Reverse Words in a String
+
+Given an input string s, reverse the order of the words.
+
+A word is defined as a sequence of non-space characters. The words in s will be separated by at least one space.
+
+Return a string of the words in reverse order concatenated by a single space.
+
+Example 1:
+
+Input: s = "the sky is blue"
+Output: "blue is sky the"
+Example 2:
+
+Input: s = "  hello world  "
+Output: "world hello"
+Explanation: Your reversed string should not contain leading or trailing spaces.
+;;;;
+java
+;;;;
+
+class Solution {
+    public String reverseWords(String s) {
+        if (s == null || s.length() == 0) {
+            return "";
+        }
+        String[] words = s.split(" ");
+
+        // Reverse the order of the words
+        StringBuilder reversed = new StringBuilder();
+        for (int i = words.length - 1; i >= 0; i--) {
+            if (!words[i].isEmpty()) {
+                reversed.append(words[i]).append(" ");
+            }
+        }
+
+        // Remove the trailing space and return the result
+        return reversed.length() > 0 ? reversed.substring(0, reversed.length() - 1) : "";
+    }
+
+}
