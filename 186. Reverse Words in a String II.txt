@@ -1,0 +1,55 @@
+186. Reverse Words in a String II
+
+Given a character array s, reverse the order of the words.
+
+A word is defined as a sequence of non-space characters. The words in s will be separated by a single space.
+
+Your code must solve the problem in-place, i.e. without allocating extra space.
+
+ 
+
+Example 1:
+
+Input: s = ["t","h","e"," ","s","k","y"," ","i","s"," ","b","l","u","e"]
+Output: ["b","l","u","e"," ","i","s"," ","s","k","y"," ","t","h","e"]
+
+............
+;;;
+java
+;;;;
+
+class Solution {
+    public void reverseWords(char[] s) {
+
+        reverse(s, 0, s.length-1); // reverse the complete array 1.
+
+        // step 2. reverse each perticular word from start to end-1
+        int start =0;
+        for(int end=0;end<s.length;end++)
+        {
+            if(s[end]== ' ')
+            {
+                reverse(s, start, end-1);
+                start= end+1;
+                // again update start to end+1 to iteratively update all words
+            }
+        }
+        reverse(s,start, s.length-1);
+        // we seperately call reverse for last word and there would be no empty char at       //the ending of the last word to identify and reverse.
+
+
+    }
+        private void reverse(char[] s, int start, int end)
+        {
+            while(start<end)
+            {
+        
+         char temp = s[start];
+         s[start] = s[end];
+         s[end]= temp;
+         start++;
+         end--;
+            }
+        }
+       }
+
