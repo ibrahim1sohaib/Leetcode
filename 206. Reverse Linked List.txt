@@ -1,0 +1,81 @@
+206. Reverse Linked List
+
+Given the head of a singly linked list, reverse the list, and return the reversed list.
+
+Input: head = [1,2,3,4,5]
+Output: [5,4,3,2,1]
+
+;;;
+java sol-1
+;;;
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        
+        ListNode prev = null;
+        ListNode curr = head;
+        while(curr!= null)
+        {
+            ListNode nextTemp = curr.next;
+            curr.next = prev;
+            prev= curr;
+            curr= nextTemp;
+        }
+  return prev;
+    }
+
+}
+.......... 
+
+;;;;;
+java sol-2:
+;;;;;
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        Stack<ListNode> stack = new Stack<>();
+        
+        // Iterate over the linked list and push each node to the stack
+        while (head != null) {
+            stack.push(head);
+            head = head.next;
+        }
+        
+        // Create a new head node and point it to the top of the stack
+        ListNode newHead = stack.pop();
+        ListNode current = newHead;
+        
+        // While the stack is not empty, set the next node of the current node
+        // to the top of the stack and move the current node forward
+        while (!stack.isEmpty()) {
+            current.next = stack.pop();
+            current = current.next;
+        }
+        
+        // Nullify the next node of the new head node to indicate the end of the list
+        current.next = null;
+        
+        return newHead;
+    }
+}
+..........
