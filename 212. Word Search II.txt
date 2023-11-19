@@ -1,0 +1,82 @@
+212. Word Search II
+
+Given an m x n board of characters and a list of strings words, return all words on the board.
+
+Each word must be constructed from letters of sequentially adjacent cells, where adjacent cells are horizontally or vertically neighboring. The same letter cell may not be used more than once in a word.
+
+Input: board = [["o","a","a","n"],["e","t","a","e"],["i","h","k","r"],["i","f","l","v"]], words = ["oath","pea","eat","rain"]
+Output: ["eat","oath"]
+
+;;;;;
+java
+;;;;;
+
+class TrieNode {
+    TrieNode[] children;
+    String word;
+
+    TrieNode() {
+        this.children = new TrieNode[26];
+        this.word = null;
+    }
+}
+
+public class Solution {
+    public List<String> findWords(char[][] board, String[] words) {
+        List<String> result = new ArrayList<>();
+        TrieNode root = buildTrie(words);// here we build trieNodes for all the words 
+
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                dfs(board, i, j, root, result);
+            }
+        }
+        return result;
+    }
+  
+    private TrieNode buildTrie(String[] words)                  //       O   (example trie node)
+       {                                                        //    /
+         TrieNode root = new TrieNode();                       //    /
+        for(String word: words)                               //    A
+        { TrieNode node = root; // store root into node.      //   /
+         for(char ch: word.toCharArray())                    //   T
+         {
+             int index= ch-'a'; // mehtod to get integer value of a char
+             if(node.children[index]== null) //if no char is found in trie node
+             {                                // we create a trienode at that index
+                 node.children[index]= new TrieNode();
+             }
+             node= node.children[index]; // if found we store that into node.
+         }
+         node.word= word; // after all the char added, at end we add node.word to store the complete word
+        }
+        return root; // we return root node which has all words consturcted as trieNode
+    }
+
+    private void dfs(char[][] board , int i ,int j, TrieNode node,List<String> result)
+    {
+        char ch = board[i][j];
+        if(ch =='#'|| node.children[ch-'a']== null) // if ch is aleady visited indicated by #
+        {                                           // or these is no children for that node in TrieNode
+            return;
+        }
+        node= node.children[ch -'a'];
+        if(node.word!=null)
+        {
+            result.add(node.word);
+            node.word=null; // avoid duplicates
+        }
+        board[i][j] = '#'; // Mark the cell as visited
+
+        if(i>0) dfs(board,i-1,j, node, result);  // ro is greater than zero
+        if(i<board.length-1) dfs(board,i+1,j, node,result); // row is less than (length-1)
+        if(j>0) dfs(board, i, j-1, node, result);    // column is greater than zero
+        if(j<board[0].length-1) dfs(board,i,j+1, node, result); // column is less than (length-1)
+
+     
+        board[i][j] = ch; // backtrack
+
+    }
+
+}
+
