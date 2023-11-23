@@ -1,0 +1,66 @@
+316. Remove Duplicate Letters
+
+Given a string s, remove duplicate letters so that every letter appears once and only once. You must make sure your result is 
+the smallest in lexicographical order
+ among all possible results.
+
+ 
+
+Example 1:
+
+Input: s = "bcabc"
+Output: "abc"
+Example 2:
+
+Input: s = "cbacdcbc"
+Output: "acdb"
+
+;;;
+java
+;;;
+
+class Solution {
+    public String removeDuplicateLetters(String s) {
+
+        int[] lastOccurrence= new int[26];
+        boolean[] visited = new boolean[26];
+
+        
+        // this array with keep the last occurence of the char in the string for
+        // ex: babc
+         // lastoccurence[1]=2;
+         //i.e lastoccurence of b represented as [1]= 2nd character
+        for(int i=0;i<s.length();i++)
+        {
+            lastOccurrence[s.charAt(i)-'a']=i;
+        }
+
+        Stack<Character> stack = new Stack<>();
+
+        for (int i = 0; i < s.length(); i++) {
+            char currentChar = s.charAt(i);
+
+            // Skip if the character is already in the result
+            if (visited[currentChar - 'a']) {
+                continue;
+            }
+
+            // Pop characters from the stack if the current character is smaller and there are more occurrences later
+            while (!stack.isEmpty() && currentChar < stack.peek() && i < lastOccurrence[stack.peek() - 'a']) {
+                visited[stack.pop() - 'a'] = false;
+            }
+
+            stack.push(currentChar);
+            visited[currentChar - 'a'] = true;
+        }
+
+        // Build the result string
+        StringBuilder result = new StringBuilder();
+        for (char ch : stack) {
+            result.append(ch);
+        }
+
+        return result.toString();
+    }
+    }
+    
