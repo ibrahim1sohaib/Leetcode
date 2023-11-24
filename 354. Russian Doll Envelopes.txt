@@ -18,6 +18,7 @@ java
 ;;;;;
 class Solution {
 
+   
     public static int maxEnvelopes(int[][] envelopes) {
         if (envelopes == null || envelopes.length == 0) {
             return 0;
@@ -25,27 +26,26 @@ class Solution {
 
         // Sort envelopes based on width in ascending order and height in descending order
         Arrays.sort(envelopes, (a, b) -> a[0] == b[0] ? b[1] - a[1] : a[0] - b[0]);
-        // if weights are equal we compare heights in descending[6,4],[6,7]:>[6,7],[6,4]
-        // if weights are diff then compare weights in ascending [5,4],[2,3]:>[5,4]
 
         int n = envelopes.length;
         int[] dp = new int[n];
-        Arrays.fill(dp, 1);
+        int len = 0;
 
-        int maxCount = 1;
-     // this is same as least increasing subsequence algo
-        for (int i = 1; i < n; i++) {
-            for (int j = 0; j < i; j++) {
-                if (envelopes[i][1] > envelopes[j][1]) {
-                    // this means that i can be taken into consideraation to male envelopes.
-                    dp[i] = Math.max(dp[i], dp[j] + 1);
-                }
+        for (int i = 0; i < n; i++) {
+            int index = Arrays.binarySearch(dp, 0, len, envelopes[i][1]);
+
+            if (index < 0) {
+                index = -(index + 1);
             }
-            maxCount = Math.max(maxCount, dp[i]);
-            // we compare macounts each time to dp[i]
+
+            dp[index] = envelopes[i][1];
+
+            if (index == len) {
+                len++;
+            }
         }
 
-        return maxCount;
+        return len;
     }
 }
 .................
