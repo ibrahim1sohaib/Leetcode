@@ -1,0 +1,51 @@
+354. Russian Doll Envelopes
+
+You are given a 2D array of integers envelopes where envelopes[i] = [wi, hi] represents the width and the height of an envelope.
+
+One envelope can fit into another if and only if both the width and height of one envelope are greater than the other envelope's width and height.
+
+Return the maximum number of envelopes you can Russian doll (i.e., put one inside the other).
+
+Note: You cannot rotate an envelope
+
+Input: envelopes = [[5,4],[6,4],[6,7],[2,3]]
+Output: 3
+Explanation: The maximum number of envelopes you can Russian doll is 3 ([2,3] => [5,4] => [6,7]).
+
+
+;;;;;
+java
+;;;;;
+class Solution {
+
+    public static int maxEnvelopes(int[][] envelopes) {
+        if (envelopes == null || envelopes.length == 0) {
+            return 0;
+        }
+
+        // Sort envelopes based on width in ascending order and height in descending order
+        Arrays.sort(envelopes, (a, b) -> a[0] == b[0] ? b[1] - a[1] : a[0] - b[0]);
+        // if weights are equal we compare heights in descending[6,4],[6,7]:>[6,7],[6,4]
+        // if weights are diff then compare weights in ascending [5,4],[2,3]:>[5,4]
+
+        int n = envelopes.length;
+        int[] dp = new int[n];
+        Arrays.fill(dp, 1);
+
+        int maxCount = 1;
+     // this is same as least increasing subsequence algo
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+                if (envelopes[i][1] > envelopes[j][1]) {
+                    // this means that i can be taken into consideraation to male envelopes.
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
+                }
+            }
+            maxCount = Math.max(maxCount, dp[i]);
+            // we compare macounts each time to dp[i]
+        }
+
+        return maxCount;
+    }
+}
+.................
