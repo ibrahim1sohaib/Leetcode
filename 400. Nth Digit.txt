@@ -1,0 +1,81 @@
+400. Nth Digit
+
+Given an integer n, return the nth digit of the infinite integer sequence [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, ...].
+
+ 
+
+Example 1:
+
+Input: n = 3
+Output: 3
+Example 2:
+
+Input: n = 11
+Output: 0
+Explanation: The 11th digit of the sequence 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, ... is a 0, which is part of the number 10.
+
+;;;;
+java
+;;;;
+ class Solution {
+
+    public static int findNthDigit(int n) {
+        // Set initial variables
+        long base = 9; // The number of digits in each range (1-9, 10-99, 100-999, ...)
+        int digits = 1; // The number of digits in the current range
+        int start = 1; // The starting number of the current range
+
+        // Find the range where the Nth digit lies
+        while (n > digits * base) {
+            n -= digits * base;
+            digits++;
+            base *= 10;
+            start *= 10;
+        }
+
+        // Find the actual number and digit within the range
+         start += (n - 1) / digits;
+         String s= Integer.toString(start);
+        
+
+        return Character.getNumericValue(s.charAt((n-1)%digits));
+    }
+
+    public static void main(String[] args) {
+        int n = 11;
+        int result = findNthDigit(n);
+        System.out.println("The " + n + "th digit is: " + result);
+    }
+}
+................
+
+explanation for example2:
+
+Explanation of each iteration:
+
+Initial State:
+
+n = 11
+base = 9
+digits = 1
+start = 1
+
+::::> First Iteration:
+
+n > digits * base, so we enter the loop.
+n = n - 9 (decremented by the number of digits in the current range multiplied by the base).
+digits incremented to 2.
+base multiplied by 10 (base = 90).
+start multiplied by 10 (start = 10).
+
+
+::::> Second Iteration:
+
+n = 2 (new value after the first iteration)
+n <= digits * base, so we exit the loop.
+
+
+::::> Finding the actual number and digit:
+
+number = start + (n - 1) / digits = 10 + (2 - 1) / 2 = 10 + 0 = 10
+digit = (int) ((number / Math.pow(10, (digits - 1 - (n - 1) % digits))) % 10) = (int) ((10 / 1) % 10) = 0
