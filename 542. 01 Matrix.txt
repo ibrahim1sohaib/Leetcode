@@ -1,0 +1,87 @@
+542. 01 Matrix
+
+Given an m x n binary matrix mat, return the distance of the nearest 0 for each cell.
+
+The distance between two adjacent cells is 1.
+
+
+Input: mat = [[0,0,0],[0,1,0],[1,1,1]]
+Output: [[0,0,0],[0,1,0],[1,2,1]]
+
+constraints:
+m == mat.length
+n == mat[i].length
+1 <= m, n <= 104
+1 <= m * n <= 104
+mat[i][j] is either 0 or 1.
+There is at least one 0 in mat.
+
+;;;;;
+java
+;;;;;
+
+class Solution {
+    public int[][] updateMatrix(int[][] mat) {
+        int m = mat.length;
+        int n = mat[0].length;
+        int[][] dp = new int[m][n];
+        
+        for (int row = 0; row < m; row++) {
+            for (int col = 0; col < n; col++) {
+                dp[row][col] = mat[row][col];
+            }
+        } 
+
+     // up and left [row-1][col] || [row][col-1]
+        for (int row = 0; row < m; row++) 
+        {
+            for (int col = 0; col < n; col++) 
+            {
+                if (dp[row][col] == 0)
+                 {
+                    continue;
+                }
+
+                int minNeighbor = m * n;
+                if (row > 0) 
+                {
+                    minNeighbor = Math.min(minNeighbor, dp[row - 1][col]);
+                }
+                
+                if (col > 0) 
+                {
+                    minNeighbor = Math.min(minNeighbor, dp[row][col - 1]);
+                }
+                
+                dp[row][col] = minNeighbor + 1;
+            }
+        }
+        
+        // down and right [row+1][col] || [row][col+1]
+        for (int row = m - 1; row >= 0; row--) 
+        {
+            for (int col = n - 1; col >= 0; col--) 
+            {
+                if (dp[row][col] == 0)
+                 {
+                    continue;
+                }
+                
+                int minNeighbor = m * n;
+                if (row < m - 1)
+                 {
+                    minNeighbor = Math.min(minNeighbor, dp[row + 1][col]);
+                }
+                
+                if (col < n - 1) 
+                {
+                    minNeighbor = Math.min(minNeighbor, dp[row][col + 1]);
+                }
+                
+                dp[row][col] = Math.min(dp[row][col], minNeighbor + 1);
+            }
+        }
+        
+        return dp;
+    }
+}
