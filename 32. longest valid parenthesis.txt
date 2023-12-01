@@ -1,0 +1,82 @@
+32. longest valid parenthesis
+
+example:
+
+Input: s = ")()())"
+Output: 4
+Explanation: The longest valid parentheses substring is "()()".
+
+;;;;
+java
+;;;;
+
+import java.util.Stack;
+
+public class LongestValidParentheses {
+    public int longestValidParentheses(String s) {
+        Stack<Integer> stack = new Stack<>();
+        stack.push(-1); // Initialize with a dummy index
+
+        int maxLen = 0;
+
+        for (int i = 0; i < s.length(); i++) {
+            char currentChar = s.charAt(i);
+
+            if (currentChar == '(') {
+                // Push the index of an open parenthesis onto the stack
+                stack.push(i);
+            } else {
+                // Pop the last index from the stack
+                stack.pop();
+
+                if (stack.isEmpty()) {
+                    // If the stack is empty, push the current index (unmatched ')' character)
+                    stack.push(i);
+                } else {
+                    // Calculate the length of the valid parentheses substring
+                    maxLen = Math.max(maxLen, i - stack.peek());
+                }
+            }
+        }
+
+        return maxLen;
+    }
+
+    public static void main(String[] args) {
+        LongestValidParentheses solution = new LongestValidParentheses();
+
+        // Example usage
+        String parentheses = "(*)";
+        System.out.println(solution.longestValidParentheses(parentheses));  // Output: 2 (longest valid substring is "(*")
+    }
+}
+
+
+////???????/////
+explanatoion
+///////????/////
+
+explain each iteration for s = "(*)" in detail for the code
+
+
+Explanation of each iteration:
+
+Initialization:
+
+stack is initialized with a dummy index -1.
+maxLen is initialized to 0.
+First Iteration (i = 0, currentChar = '('):
+
+Push the index 0 onto the stack.
+Second Iteration (i = 1, currentChar = '*'):
+
+Pop the last index from the stack (stack becomes empty).
+Push the current index 1 onto the stack.
+Third Iteration (i = 2, currentChar = ')'):
+
+Pop the last index from the stack (index 1).
+Calculate the length of the valid parentheses substring: 2 - (-1) = 3.
+Update maxLen to 3.
+End of Iterations:
+
+The final maxLen is 3, representing the length of the longest valid parentheses substring in the input (*).
