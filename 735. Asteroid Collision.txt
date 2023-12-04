@@ -1,0 +1,64 @@
+735. Asteroid Collision
+
+We are given an array asteroids of integers representing asteroids in a row.
+
+For each asteroid, the absolute value represents its size, and the sign represents its direction (positive meaning right, negative meaning left). Each asteroid moves at the same speed.
+
+Find out the state of the asteroids after all collisions. If two asteroids meet, the smaller one will explode. If both are the same size, both will explode. Two asteroids moving in the same direction will never meet.
+
+Example 1:
+
+Input: asteroids = [5,10,-5]
+Output: [5,10]
+Explanation: The 10 and -5 collide resulting in 10. The 5 and 10 never collide.
+
+
+;;;;
+java
+;;;;
+class Solution {
+    public int[] asteroidCollision(int[] asteroids) {
+        Stack<Integer> st = new Stack<Integer>();
+
+        for(int asteroid: asteroids)
+        {
+            boolean flag =true;
+            while(!st.isEmpty() && (st.peek()>0 && asteroid<0))
+            {
+
+                //case1: 
+                // top on stack is smaller, pop st elmnt and continue with nxt asteroid
+                if(Math.abs(st.peek()) < Math.abs(asteroid))
+                {
+                    st.pop();
+                    continue;
+                }
+                // case2: 
+                //top on stack and curr asteroid same size, both explode.
+                //>>  pop st and we dont push curr elem on stack
+                else if(Math.abs(st.peek()) == Math.abs(asteroid))
+                {
+                    st.pop();
+                }
+                // case3:
+                // here we reach if st.peek()> asteroid
+                // so we set flag to false to not add curr asteroid to stack
+                flag =false;
+                break;
+            }
+            if(flag)
+            {
+                st.push(asteroid);
+            }
+        }
+        // storing the remaining asteroids into result array
+        int[] result= new int[st.size()];
+        for(int i= result.length-1;i>=0;i--)
+        {
+            result[i]=st.peek();
+            st.pop();
+        }
+
+        return result;
+}
+}
