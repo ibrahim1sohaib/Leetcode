@@ -1,0 +1,82 @@
+733. Flood Fill
+
+An image is represented by an m x n integer grid image where image[i][j] represents the pixel value of the image.
+
+You are also given three integers sr, sc, and color. You should perform a flood fill on the image starting from the pixel image[sr][sc].
+
+To perform a flood fill, consider the starting pixel, plus any pixels connected 4-directionally to the starting pixel of the same color as the starting pixel, plus any pixels connected 4-directionally to those pixels (also with the same color), and so on. Replace the color of all of the aforementioned pixels with color.
+
+Return the modified image after performing the flood fill.
+
+
+
+;;;;
+java
+;;;;;
+
+ class Solution {
+    public int[][] floodFill(int[][] image, int sr, int sc, int newColor) {
+        int rows = image.length;
+        int cols = image[0].length;
+        int oldColor = image[sr][sc];
+
+        // Check if the new color is the same as the old color
+        if (oldColor == newColor) {
+            return image;
+        }
+
+        // Perform DFS to fill the connected region
+        dfs(image, sr, sc, oldColor, newColor);
+
+        return image;
+    }
+
+    private void dfs(int[][] image, int row, int col, int oldColor, int newColor) {
+        int rows = image.length;
+        int cols = image[0].length;
+
+        // Base case: check boundaries and color match
+        if (row < 0 || row >= rows || col < 0 || col >= cols || image[row][col] != oldColor) {
+            return;
+        }
+
+        // Change the color of the current pixel
+        image[row][col] = newColor;
+
+        // Explore neighbors in DFS
+        dfs(image, row + 1, col, oldColor, newColor); // Down
+        dfs(image, row - 1, col, oldColor, newColor); // Up
+        dfs(image, row, col + 1, oldColor, newColor); // Right
+        dfs(image, row, col - 1, oldColor, newColor); // Left
+    }
+
+ }
+
+
+;;;;
+pseudo algo
+;;;;;
+
+Algorithm: Flood Fill
+
+Inputs:
+
+image: a 2D array representing the image
+sr: starting row index
+sc: starting column index
+newColor: the color to be filled
+Set oldColor as the color of the pixel at image[sr][sc].
+
+Check if oldColor is equal to newColor. If true, return the original image since there's no change needed.
+
+Perform Depth-First Search (DFS) starting from the pixel at (sr, sc):
+a. Base case: If the current pixel is outside the image boundaries or has a color different from oldColor, return.
+b. Change the color of the current pixel to newColor.
+c. Recursively call DFS for the neighboring pixels (up, down, left, right).
+
+In the main method:
+a. Create a FloodFill instance.
+b. Initialize the image matrix and starting indices (sr and sc).
+c. Call floodFill with the given inputs.
+d. Print the resulting image.
+
