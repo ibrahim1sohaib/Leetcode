@@ -1,0 +1,93 @@
+767. Reorganize String
+
+Given a string s, rearrange the characters of s so that any two adjacent characters are not the same.
+
+Return any possible rearrangement of s or return "" if not possible.
+
+Example 1:
+
+Input: s = "aab"
+Output: "aba"
+Example 2:
+
+Input: s = "aaab"
+Output: ""
+
+;;;;;;;;
+java
+;;;;;;;;;
+
+class Solution {
+   public String reorganizeString(String s) {
+        Map<Character, Integer> charCount = new HashMap<>();
+        PriorityQueue<Character> maxHeap = new PriorityQueue<>((a, b) -> charCount.get(b) - charCount.get(a));
+
+        // Count the frequency of each character
+        for (char c : s.toCharArray()) {
+            charCount.put(c, charCount.getOrDefault(c, 0) + 1);
+        }
+
+        // Add characters to max heap
+        maxHeap.addAll(charCount.keySet());
+
+        StringBuilder result = new StringBuilder();
+        while (maxHeap.size() >= 2) {
+            char first = maxHeap.poll();
+            char second = maxHeap.poll();
+
+            result.append(first);
+            result.append(second);
+
+            charCount.put(first, charCount.get(first) - 1);
+            charCount.put(second, charCount.get(second) - 1);
+
+            if (charCount.get(first) > 0) {
+                maxHeap.offer(first);
+            }
+            if (charCount.get(second) > 0) {
+                maxHeap.offer(second);
+            }
+        }
+
+        // If there is one character left in the heap
+        if (!maxHeap.isEmpty()) {
+            char lastChar = maxHeap.poll();
+            if (charCount.get(lastChar) > 1) {
+                return "";
+            }
+            result.append(lastChar);
+        }
+
+        return result.toString();
+    }
+}
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+Algorithm: Reorganize String
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+Count Character Frequencies:
+
+Create a map charCount to store the frequency of each character in the input string.
+Iterate through each character in the input string and update the frequency in the map.
+Build Max Heap:
+
+Create a max heap (maxHeap) to prioritize characters based on their frequencies.
+Add characters to the max heap based on their frequencies.
+Construct Reorganized String:
+
+Initialize an empty StringBuilder (result) to store the reorganized string.
+While the max heap has at least two characters:
+Poll the two most frequent characters from the heap.
+Append them alternatively to the result string.
+Update the character frequencies in charCount.
+Reinsert characters back into the max heap if their frequency is greater than zero.
+Handle Remaining Character:
+
+If there is one character left in the heap:
+Poll the last character from the heap.
+Check its frequency in charCount.
+If the frequency is greater than 1, return an empty string.
+Otherwise, append the last character to the result.
+Return Result:
+
+Return the final reorganized string
