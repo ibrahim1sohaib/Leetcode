@@ -32,36 +32,35 @@ dp[i] = Number of ways of decoding substring s[:i]. So we might say dp[i] = dp[i
 ;;;;
 java
 ;;;
-class Solution {
-
-    public int numDecodings(String s) {
-        if(s== null || s.length()==0)
-        {
+ class Solution {
+    public  int numDecodings(String s) {
+        if (s == null || s.length() == 0) {
             return 0;
         }
-        int n= s.length();
-        int[] dp = new int[n+1];
-        dp[0]=1;
-        dp[1]= s.chartAt(0)==0 ? 0 : 1;
-        // check the first character
 
-        for(int i=2;i<s.length();i++)
-        {
-            int oneDigit = Integer.parseInt(s.substring(i-1,i)); //[1,2]
-            int twoDigit = Integer.parseInt(s.substring(i-2,i));// [0,2]
-            
-            // if curr digit not 0, add ways of decoding single digit
-            if(oneDigit!=0)
-            {
-                dp[i]+=dp[i-1];
-            }
-             // if two digits form a valid decoding, add ways of decoding two digitts ago
-            if(twoDigit>=10 && twoDigit<=26)
-            {
-                dp[i]+=dp[i-2];
+        int n = s.length();
+        int[] dp = new int[n + 1];
+        dp[0] = 1;
+
+        // Check the first character
+        dp[1] = s.charAt(0) == '0' ? 0 : 1;
+
+        for (int i = 2; i <= n; i++) {
+            // Check the current character
+            int oneDigit = Integer.parseInt(s.substring(i - 1, i));
+            int twoDigits = Integer.parseInt(s.substring(i - 2, i));
+
+            // If the current digit is not '0', add the ways of decoding the single digit
+            if (oneDigit != 0) {
+                dp[i] += dp[i - 1];
             }
 
+            // If the two digits form a valid decoding, add the ways of decoding two digits ago
+            if (twoDigits >= 10 && twoDigits <= 26) {
+                dp[i] += dp[i - 2];
+            }
         }
+
         return dp[n];
     }
 }
