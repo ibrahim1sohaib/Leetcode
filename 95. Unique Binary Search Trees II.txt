@@ -1,0 +1,91 @@
+95. Unique Binary Search Trees II
+
+Given an integer n, return all the structurally unique BST's (binary search trees), which has exactly n nodes of unique values from 1 to n. Return the answer in any order.
+
+Input: n = 3
+Output: [[1,null,2,null,3],[1,null,3,2],[2,1,3],[3,1,null,null,2],[3,2,null,1]]
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+     public List<TreeNode> generateTrees(int n) {
+        if (n == 0) {
+            return new ArrayList<>();
+        }
+        return generateTrees(1, n);
+    }
+
+    private List<TreeNode> generateTrees(int start, int end) {
+        List<TreeNode> result = new ArrayList<>();
+
+        if (start > end) {
+            result.add(null);
+            return result;
+        }
+
+        for (int i = start; i <= end; i++) {
+            List<TreeNode> leftSubtrees = generateTrees(start, i - 1);
+            List<TreeNode> rightSubtrees = generateTrees(i + 1, end);
+
+            for (TreeNode left : leftSubtrees) {
+                for (TreeNode right : rightSubtrees) {
+                    TreeNode root = new TreeNode(i);
+                    root.left = left;
+                    root.right = right;
+                    result.add(root);
+                }
+            }
+        }
+
+        return result;
+    }
+}
+
+
+;;;;;;;;;;;;;;;;
+explain for i=3
+;;;;;;;;;;;;;;;;
+Now, let's go through each iteration:
+
+Initial Call: generateTrees(1, 3)
+
+  The function starts with the range [1, 3].
+  It iterates from 1 to 3, considering each number as the root.
+  For root = 1:
+	Generates leftSubtrees for the range [1, 0] (empty), which returns a list with a null node.
+	Generates rightSubtrees for the range [2, 3], resulting in two subtrees: [2, 3] and [3].
+	Combines each left subtree with each right subtree, creating two trees.
+  For root = 2:
+	Generates leftSubtrees for the range [1, 1], resulting in one subtree: [1].
+	Generates rightSubtrees for the range [3, 3], resulting in one subtree: [3].
+	Combines left and right subtrees, creating one tree.
+  For root = 3:
+	Generates leftSubtrees for the range [1, 2], resulting in two subtrees: [1, null, 2] and [1, 2].
+	Generates rightSubtrees for the range [4, 3] (empty), which returns a list with a null node.
+	Combines left and right subtrees, creating two trees.
+
+Result:
+
+The result contains all the unique BSTs generated for the range [1, 3].
+Output:
+
+
+Output:
+1 null 2 null 3
+1 null 3 2
+2 1 3
+3 1 null null 2
+3 2 null 1
