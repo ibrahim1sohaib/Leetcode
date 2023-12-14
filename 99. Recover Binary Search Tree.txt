@@ -1,0 +1,101 @@
+99. Recover Binary Search Tree
+
+You are given the root of a binary search tree (BST), where the values of exactly two nodes of the tree were swapped by mistake. Recover the tree without changing its structure.
+
+Input: root = [1,3,null,null,2]
+Output: [3,1,null,null,2]
+Explanation: 3 cannot be a left child of 1 because 3 > 1. Swapping 1 and 3 makes the BST valid.
+
+   1           3
+  /           /
+ 3     -->   1
+  \           \
+   2           2
+
+
+;;;;;
+java
+;;;;;
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+   private TreeNode firstElement = null;
+    private TreeNode secondElement = null;
+    private TreeNode prevElement = null;
+
+    public void recoverTree(TreeNode root) {
+        // Perform an in-order traversal to find the two swapped nodes
+        traverse(root);
+
+        // Swap the values of the misplaced nodes
+        int temp = firstElement.val;
+        firstElement.val = secondElement.val;
+        secondElement.val = temp;
+    }
+
+    private void traverse(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+
+        // Traverse left subtree
+        traverse(root.left);
+
+        // Check for misplaced nodes
+        if (firstElement == null && prevElement != null && prevElement.val >= root.val) {
+            firstElement = prevElement;
+        }
+        if (firstElement != null && prevElement != null && prevElement.val >= root.val) {
+            secondElement = root;
+        }
+
+        // Update previous element
+        prevElement = root;
+
+        // Traverse right subtree
+        traverse(root.right);
+    }
+}
+
+
+
+;;;;;;;;
+explain
+;;;;;;;;
+
+[1,3,null,null,2]
+   1           3
+  /           /
+ 3     -->   1
+  \           \
+   2           2
+.traverse(1)
+.root is not null
+.  //trave(root.left)
+. ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;  
+. ;traverse(3)		                         ;
+  ; root.left is null			         ;
+. ; we update prevElement to root here which is 3;
+. ;   ,root.right is 2 
+  ;   , 
+. ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+.first if loop
+.   firstelement is null , prevelemen.val(3) >= root.val(1)
+.   we update firstElement to 3
+. second if loop 
+.   first element is not null && we update secondElement to 1
+. root.
+...................................................
