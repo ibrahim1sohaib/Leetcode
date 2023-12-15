@@ -23,37 +23,31 @@ Output
 java
 ;;;;;
 class MyHashMap {
-    private int[] keys;
-    private int[] values;
-
-    public MyHashMap() {
-        keys = new int[10000];
-        values = new int[10000];
+private static ArrayList<Integer> keys, values;
+public MyHashMap() {
+    keys = new ArrayList<Integer>();
+    values = new ArrayList<Integer>();
+}
+public void put(int key, int value) {
+    int i;
+    if((i = keys.indexOf(key)) != -1)
+        values.set(i, value);
+    else{
+        keys.add(key);
+        values.add(value);
     }
-
-    public void put(int key, int value) {
-        int index = getIndex(key);
-        keys[index] = key;
-        values[index] = value;
+}
+public int get(int key) {
+    int i;
+    if((i = keys.indexOf(key)) != -1)
+        return values.get(i);
+    return -1;
+}
+public void remove(int key) {
+    int i = keys.indexOf(key);
+    if(i != -1){
+        keys.remove(i);
+        values.remove(i);
     }
-
-    public int get(int key) {
-        int index = getIndex(key);
-        if (keys[index] == key) {
-            return values[index];
-        }
-        return -1;
-    }
-
-    public void remove(int key) {
-        int index = getIndex(key);
-        if (keys[index] == key) {
-            keys[index] = 0;
-            values[index] = 0;
-        }
-    }
-
-    private int getIndex(int key) {
-        return Integer.hashCode(key) % keys.length;
-    }
-} 
+}
+}
