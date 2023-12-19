@@ -1,0 +1,111 @@
+1027. Longest Arithmetic Subsequence
+
+Given an array nums of integers, return the length of the longest arithmetic subsequence in nums.
+
+Note that:
+
+A subsequence is an array that can be derived from another array by deleting some or no elements without changing the order of the remaining elements.
+
+A sequence seq is arithmetic if seq[i + 1] - seq[i] are all the same value (for 0 <= i < seq.length - 1).
+
+Example 2:
+
+Input: nums = [9,4,7,2,10]
+Output: 3
+Explanation:  The longest arithmetic subsequence is [4,7,10].
+
+;;;;
+java
+;;;;
+class Solution {
+    public int longestArithSeqLength(int[] nums) {
+       int n = nums.length;
+        if (n <= 1) {
+            return n;
+        }
+
+        int maxLength = 2;  // At least two elements are needed for an arithmetic subsequence
+        Map<Integer, Integer>[] dp = new HashMap[n];
+
+        for (int i = 0; i < n; i++) {
+            dp[i] = new HashMap<>();
+        }
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+                int diff = nums[i] - nums[j];
+
+                // Get the length of the arithmetic subsequence ending at index j with the common difference diff
+                int prevLength = dp[j].getOrDefault(diff, 1) + 1;
+
+                // Update the length of the arithmetic subsequence ending at index i with the common difference diff
+                dp[i].put(diff, prevLength);
+
+                // Update the overall maxLength
+                maxLength = Math.max(maxLength, prevLength);
+            }
+        }
+
+        return maxLength;
+    }
+}
+
+;;;;;;;;;;
+explain
+;;;;;;;;;
+Input: nums = [9,4,7,2,10]
+
+......
+algo
+;;;;
+
+1. Initialize maxLength to 2 (minimum length of an arithmetic subsequence) and create an array of HashMaps, to store the length of subsequences with different common differences.
+
+2. Iterate over each element in the input array:
+    a. For each element nums[i], iterate over all previous elements nums[j] (where j < i):
+        - Calculate the common difference as diff = nums[i] - nums[j].
+        - Get the length of the arithmetic subsequence ending at index j with the common difference diff from dp[j].
+        - Update dp[i][diff] to the length of the subsequence ending at index i with the common difference diff, which is dp[j][diff] + 1.
+        - Update maxLength with the maximum value between its current value and dp[i][diff].
+
+3. Return maxLength as the result, which represents the length of the longest arithmetic subsequence.
+
+
+
+...........
+explanation
+...........
+1. we create a hashmap dp of lenght of nums
+2. at each dp[i] we again create a hashmap to store differences from i to every i-1 indices at particular map
+ example dp[3]{-7:2,-2:2,-5:2} 
+ formed from 2-9  2-4  2-7 
+
+for example loop 
+ i=4,j=0<4
+diff = 10-9=1
+prevlength= dp[j][diff]=dp[0][1]+1=2 (default+1)
+dp[i][diff]= prevlength;
+dp[4][1]=2
+maxlength =2
+.......
+i=4, j=1<4
+diff= 10-4=6
+prevlength= dp[j][diff]= dp[1][6]+1 = 2 (default+1)
+dp[i][diff]= prevlength
+dp[4][6]=2
+maxlen =2
+.........
+i=4, j=2<4
+diff=10-7=3
+prevlength= dp[j][diff]= dp[2][3]+1 = 2+1 =3
+dp[4][3] =3
+maxlength=3
+..........
+i=4, j=3<4
+diff=10-2=8
+prevlength= dp[j][diff]= dp[3][8]+1 = 2(default+1)
+dp[4][8] =2
+maxlength=3
+
+
+
