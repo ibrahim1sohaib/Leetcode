@@ -1,0 +1,56 @@
+290. Word Pattern
+
+Given a pattern and a string s, find if s follows the same pattern.
+
+Here follow means a full match, such that there is a bijection between a letter in pattern and a non-empty word in s.
+
+ 
+
+Example 1:
+
+Input: pattern = "abba", s = "dog cat cat dog"
+Output: true
+
+;;;;
+java
+;;;;
+class Solution {
+    public boolean wordPattern(String pattern, String s) {
+        String[] words = s.split(" ");
+
+        // base case if patterns length is not equal to words length
+        if (pattern.length() != words.length) {
+            return false;
+        }
+
+       // hashmaps to map char to word and word to char
+        Map<Character, String> patternMap = new HashMap<>();
+        Map<String, Character> wordMap = new HashMap<>();
+
+        for (int i = 0; i < pattern.length(); i++) {
+            char currentChar = pattern.charAt(i);
+            String currentWord = words[i];
+               // if the char is already mapped
+            if (patternMap.containsKey(currentChar)) {
+                // Check if the existing mapping matches the current word
+                if (!patternMap.get(currentChar).equals(currentWord)) {
+                    return false;
+                }
+            } else {
+                // Check if the current word is already mapped to another character
+                if (wordMap.containsKey(currentWord)) {
+                    return false;
+                }
+
+                // Create a new mapping
+                patternMap.put(currentChar, currentWord);
+                wordMap.put(currentWord, currentChar);
+            }
+        }
+
+        return true;
+    }
+        
+    }
+
+;;;;;;;;;;;;;;;;

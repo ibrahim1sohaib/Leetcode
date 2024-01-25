@@ -1,0 +1,88 @@
+68. Text Justification
+
+Given an array of strings words and a width maxWidth, format the text such that each line has exactly maxWidth characters and is fully (left and right) justified.
+
+You should pack your words in a greedy approach; that is, pack as many words as you can in each line. Pad extra spaces ' ' when necessary so that each line has exactly maxWidth characters.
+
+Extra spaces between words should be distributed as evenly as possible. If the number of spaces on a line does not divide evenly between words, the empty slots on the left will be assigned more spaces than the slots on the right.
+
+For the last line of text, it should be left-justified, and no extra space is inserted between words.
+
+Example 1:
+
+Input: words = ["This", "is", "an", "example", "of", "text", "justification."], maxWidth = 16
+Output:
+[
+   "This    is    an",
+   "example  of text",
+   "justification.  "
+]
+
+
+;;;;;
+java
+;;;;
+ class Solution {
+    public List<String> fullJustify(String[] words, int maxWidth) {
+        List<String> result = new ArrayList<>();
+        int i = 0, n = words.length;
+
+        // Iterate through the words array
+        while (i < n) {
+            int j = i + 1;
+            int lineLength = words[i].length();// sum of wordslength
+
+            // Find the words to fit in the current line while considering limit as maxWidth
+            while (j < n && (lineLength + words[j].length() + (j - i - 1) < maxWidth)) {
+                lineLength += words[j].length();
+                ++j;
+            }
+
+            int diff = maxWidth - lineLength;
+            int numberOfWords = j - i;
+
+            // Check if it's the last line or only one word on the line, then left justify
+            if (numberOfWords == 1 || j >= n) {
+                result.add(leftJustify(words, diff, i, j));
+            } else {
+                // Otherwise, distribute spaces evenly for middle justification having multiple words
+                result.add(middleJustify(words, diff, i, j));
+            }
+
+            i = j; // Move to the next set of words
+        }
+        return result;
+    }
+
+    // Helper method for middle justification
+    private String middleJustify(String[] words, int diff, int i, int j) {
+        int spacesNeeded = j - i - 1; //total spacelength required
+        int spaces = diff / spacesNeeded;//even spaces between wordslength
+        int extraSpaces = diff % spacesNeeded;//extra spaces left after even distribution btw words
+        StringBuilder result = new StringBuilder(words[i]);
+
+        // Iterate through the words to add spaces accordingly
+        for (int k = i + 1; k < j; ++k) {
+            int spacesToApply = spaces + (extraSpaces-- > 0 ? 1 : 0);
+            // if extraspace is not zero, we add extraspace to spaces and decrement extraspace value
+            result.append(" ".repeat(spacesToApply) + words[k]);
+        }
+
+        return result.toString();
+    }
+
+    // Helper method for left justification
+    private String leftJustify(String[] words, int diff, int i, int j) {
+        int spacesOnRight = diff - (j - i - 1);
+     //diff - (j - i - 1):calculates remaining spaces after considering the spaces between the words.
+        StringBuilder result = new StringBuilder(words[i]);
+
+        // Iterate through the words to add spaces on the right
+        for (int k = i + 1; k < j; ++k) {
+            result.append(" " + words[k]);//this adds only one space between words
+        }
+       // we add the leftover spaces to the right
+        result.append(" ".repeat(spacesOnRight));
+        return result.toString();
+    }
+}
