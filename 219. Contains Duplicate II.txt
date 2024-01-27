@@ -1,0 +1,44 @@
+219. Contains Duplicate II
+Easy
+Topics
+Companies
+Given an integer array nums and an integer k, return true if there are two distinct indices i and j in the array such that nums[i] == nums[j] and abs(i - j) <= k.
+
+ 
+
+Example 1:
+
+Input: nums = [1,2,3,1], k = 3
+Output: true
+
+;;;;;
+java
+;;;;;
+class Solution {
+    public boolean containsNearbyDuplicate(int[] nums, int k) {
+        if (nums == null || nums.length == 0 || k <= 0) {
+            return false;
+        }
+
+        // Map to store the last index of each number
+        HashMap<Integer, Integer> indexMap = new HashMap<>();
+
+        for (int i = 0; i < nums.length; i++) {
+            int num = nums[i];
+
+            // Check if the number is already in the map
+            if (indexMap.containsKey(num)) {
+                // If the absolute difference between the current index and the last index is at most k, return true
+                if (i - indexMap.get(num) <= k) {
+                    return true;
+                }
+            }
+
+            // Update the index of the current number
+            indexMap.put(num, i);
+        }
+
+        // No such indices found
+        return false;
+    }
+}
